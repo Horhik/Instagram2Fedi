@@ -16,3 +16,7 @@ docker container run -it -d -v $(pwd):/app $YOUR_CONTAINER_NAME $I2M_INSTAGRAM_U
 You can write all needed variables in `./env.sh` and then do `source ./env.sh`
 
 
+![image](https://user-images.githubusercontent.com/46262811/131577640-a3103ff2-af37-422d-96f1-60f1acdef939.png)
+
+
+
