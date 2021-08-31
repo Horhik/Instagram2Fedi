@@ -1,10 +1,13 @@
-FROM python
+FROM python:3.9
 
 RUN pip install instabot
-RUN pip3 install Mastodon.py
-RUN pip3 install colorama
+RUN pip install instaloader
+RUN pip install Mastodon.py
+RUN pip install colorama
 
 COPY . /app
 WORKDIR /app
 
-ENTRYPOINT [ "python", "/app/__init__.py", "innubis"]
+
+ENTRYPOINT ["python", "/app/src/main.py", "innubis"]
+
