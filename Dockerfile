@@ -1,6 +1,5 @@
 FROM python:3.9
 
-RUN pip install instabot
 RUN pip install instaloader
 RUN pip install Mastodon.py
 RUN pip install colorama

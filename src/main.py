@@ -79,7 +79,7 @@ def toot(url, title ):
         print(Style.RESET_ALL)
 
         id = upload_image_to_mastodon(url)
-        post_text = str(title) + "\n" + "crosposted from instagram.com/innubis" # creating post text
+        post_text = str(title) + "\n" + "crosposted from https://instagram.com/"+fetched_user # creating post text
         print(id)
         mastodon.status_post(post_text, media_ids = [id])
 
@@ -114,14 +114,14 @@ def generate_title(post):
 #  'edge_media_to_caption': {'edges': [{'node': {'text': 'Good morning!\n#komikaki #всемкартинки'}}]}
 
 posts = profile.get_posts()
-stupidcounter = 0
-
 def get_new_posts():
+    stupidcounter = 0
     for post in posts:
         if stupidcounter < 100:
             if already_posted(str(post.url)):
                 print(Fore.YELLOW + "🐘 > Already Posted", stupidcounter, " of ", posts.count)
                 print(Style.RESET_ALL)
+                stupidcounter += 1
                 continue
             stupidcounter += 1
             toot(post.url, post.caption)
@@ -130,6 +130,6 @@ def get_new_posts():
             break
 
 
-while true:
+while True:
     get_new_posts()
     time.sleep(600)
