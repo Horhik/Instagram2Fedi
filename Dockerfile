@@ -8,5 +8,5 @@ COPY . /app
 WORKDIR /app
 
 
-ENTRYPOINT ["python", "/app/src/main.py", "innubis"]
+ENTRYPOINT ["python", "/app/src/main.py"]
 
