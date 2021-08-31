@@ -1,6 +1,7 @@
 import os
 import sys
 import requests
+import time
 from mastodon import Mastodon
 from colorama import Fore, Back, Style
 from instaloader import Profile, Instaloader
@@ -11,9 +12,7 @@ f.write("\n")
 f.close()
 
 fetched_user = sys.argv[1]
-username = sys.argv[2]
-passwd = sys.argv[3]
-mastodon_token = sys.argv[4]
+mastodon_token = sys.argv[2]
 
 print(Fore.GREEN + '🚀 > Connecting to Instagram...')
 print(Style.RESET_ALL)
@@ -116,14 +115,21 @@ def generate_title(post):
 
 posts = profile.get_posts()
 stupidcounter = 0
-for post in posts:
-    if stupidcounter < 100:
-        if already_posted(str(post.url)):
-            print(Fore.YELLOW + "🐘 > Already Posted", stupidcounter, " of ", posts.count)
-            print(Style.RESET_ALL)
-            continue
-        stupidcounter += 1
-        toot(post.url, post.caption)
-        mark_as_posted(str(post.url))
-    else:
-        break
+
+def get_new_posts():
+    for post in posts:
+        if stupidcounter < 100:
+            if already_posted(str(post.url)):
+                print(Fore.YELLOW + "🐘 > Already Posted", stupidcounter, " of ", posts.count)
+                print(Style.RESET_ALL)
+                continue
+            stupidcounter += 1
+            toot(post.url, post.caption)
+            mark_as_posted(str(post.url))
+        else:
+            break
+
+
+while true:
+    get_new_posts()
+    time.sleep(600)
