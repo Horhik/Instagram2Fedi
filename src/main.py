@@ -1,12 +1,9 @@
 import os
 import sys
 import requests
-from instabot import Bot
 from mastodon import Mastodon
 from colorama import Fore, Back, Style
-import glob
-cookie_del = glob.glob("config/*cookie.json")
-os.remove(cookie_del[0])
+from instaloader import Profile, Instaloader
 
 id_filename = "/app/already_posted.txt"
 f = open(id_filename, "a")
@@ -18,11 +15,11 @@ username = sys.argv[2]
 passwd = sys.argv[3]
 mastodon_token = sys.argv[4]
 
-print(Fore.GREEN + '🚀 > Loginning into Instagram...')
+print(Fore.GREEN + '🚀 > Connecting to Instagram...')
 print(Style.RESET_ALL)
-bot = Bot()
-print(username, passwd)
-bot.login(username = username,  password = passwd)
+
+L = Instaloader()
+profile = Profile.from_username(L.context, fetched_user)
 
 print(Fore.GREEN + '🚀 > Connecting to Mastodon/Pixelfed...')
 print(Style.RESET_ALL)
@@ -32,75 +29,101 @@ mastodon = Mastodon(
     # api_base_url = 'https://pixelfed.tokyo/'
 )
 
-def get_post(media_id):
-    print(Fore.YELLOW + '🔃 > getting post: ' + media_id)
-    print(Style.RESET_ALL)
-    media = bot.get_media_info(media_id)[0]
-    id = media["id"]
-    post_text = media["caption"]["text"]
-    print(Fore.YELLOW + '🔃 > getting link: ' + media_id)
-    print(Style.RESET_ALL)
-    link = bot.get_media_id_from_link(id)
-    images = []
-    if ("image_versions2" in media.keys()):
-        url = media["image_versions2"]["candidates"][0]["url"]
+def get_image(url):
+    try: 
+        print(Fore.YELLOW + "🚀 > Downloading Image...", url)
+        print(Style.RESET_ALL)
+
         response = requests.get(url)
         response.raw.decode_content = True
-        images.append(response.content)
-    elif("carousel_media" in media.keys()):
-        for e, element in enumerate(media["carousel_media"]):
-            url = element['image_versions2']["candidates"][0]["url"]
-            response = requests.get(url)
-            response.raw.decode_content = True
-            images.append(response.content)
-    return {
-        "id"  : id,
-        "text": post_text,
-        "link": link,
-        "images" : images
-    }
+        
+        print(Fore.GREEN + "✨ > Downloaded!")
+        print(Style.RESET_ALL)
 
+        return response.content
+    except:
+
+        print(Fore.RED + "💥 > Failed to download image.")
+        print(Style.RESET_ALL)
+
+    
 def already_posted(id):
-    file = open(id_filename, 'r');
-    if id in file:
+    file = open(id_filename);
+    content = file.read()
+    if id in content:
         file.close()
         return True
     else:
         file.close()
         return False
 
-def add_id(id):
+def mark_as_posted(id):
     file = open(id_filename, 'a');
     file.write(id + "\n")
     file.close()
 
-def upload_images_to_mastodon(images_array):
-    ids = []
-    for i in images_array:
-        try:
-            media = mastodon.media_post(media_file = i, mime_type = "image/jpeg") # sending image to mastodon
-            ids.append(media["id"])
-        except:
-            print(Fore.RED + "💥 > failed to send photo")
+def upload_image_to_mastodon(url):
+    try:
+        print(Fore.YELLOW + "🐘 > Uploading Image...")
+        print(Style.RESET_ALL)
+        media = mastodon.media_post(media_file = get_image(url), mime_type = "image/jpeg") # sending image to mastodon
+        print(Fore.GREEN + "✨ > Uploaded!")
+        print(Style.RESET_ALL)
+    except:
+        print(Fore.RED + "💥 > failed to upload image to mastodon")
+        print(Style.RESET_ALL)
+    return media["id"]
+
+def toot(url, title ):
+    try:
+        print(Fore.YELLOW + "🐘 > Creating Toot...", title)
+        print(Style.RESET_ALL)
+
+        id = upload_image_to_mastodon(url)
+        post_text = str(title) + "\n" + "crosposted from instagram.com/innubis" # creating post text
+        print(id)
+        mastodon.status_post(post_text, media_ids = [id])
+
+    except:
+        print(Fore.RED + "😿 > Failed to create toot")
+        print(Style.RESET_ALL)
+
+def none_convert(title):
+    if title == None:
+        return ""
+    else:
+        return str(title)
+
+def generate_title(post):
+    text = ""
+    try:
+        print(post.title)
+        text += none_convert(post.title) + "\n"
+    except:
+        print("no title")
+    try:
+        print(post.accessibility_caption)
+        text += none_convert(post.accessibility_caption) + "\n"
+    except:
+        print("no accessibilitycaption")
+    try:
+        print(post.edge_media_to_caption['edges'][0]['node']['text'])
+        text += none_convert(post.edge_media_to_caption['edges'][0]['node']['text'])
+    except:
+        print("no edge_media_to_caption")
+    return text
+#  'edge_media_to_caption': {'edges': [{'node': {'text': 'Good morning!\n#komikaki #всемкартинки'}}]}
+
+posts = profile.get_posts()
+stupidcounter = 0
+for post in posts:
+    if stupidcounter < 100:
+        if already_posted(str(post.url)):
+            print(Fore.YELLOW + "🐘 > Already Posted", stupidcounter, " of ", posts.count)
             print(Style.RESET_ALL)
-    return ids
-
-twony_last_medias = bot.get_user_medias(fetched_user, filtration = None)
-#filter(lambda x: not already_posted(x), twony_last_medias)
-       
-print(twony_last_medias)
-print(len(twony_last_medias))
-
-for media_id in enumerate(twony_last_medias):
-    post = get_post(media_id) # getting post info
-    print(post["link"])
-    #if(not already_posted(post["id"])):
-    #   try:
-    #       image_ids = upload_images_to_mastodon(post["images"])
-    #       post_text = str(post["text"]) + "\n" + "crosposted from " + str(post["link"]) # creating post text
-    #       mastodon.status_post(post_text, media_ids = image_ids) # attaching image to post and creating a toot
-    #       add_id(post["id"]) # pushing id to "already_posted" file
-    #   except:
-    #       print(Fore.RED + "😿 > failed to create toot")
-    #       print(Style.RESET_ALL)
-
+            continue
+        stupidcounter += 1
+        toot(post.url, post.caption)
+        mark_as_posted(str(post.url))
+    else:
+        break
