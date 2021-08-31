@@ -12,7 +12,8 @@ f.write("\n")
 f.close()
 
 fetched_user = sys.argv[1]
-mastodon_token = sys.argv[2]
+mastodon_instance = sys.argv[2]
+mastodon_token = sys.argv[3]
 
 print(Fore.GREEN + '🚀 > Connecting to Instagram...')
 print(Style.RESET_ALL)
@@ -24,7 +25,7 @@ print(Fore.GREEN + '🚀 > Connecting to Mastodon/Pixelfed...')
 print(Style.RESET_ALL)
 mastodon = Mastodon(
     access_token = mastodon_token,
-    api_base_url = 'https://mastodon.ml'
+    api_base_url = mastodon_instance
     # api_base_url = 'https://pixelfed.tokyo/'
 )
 
