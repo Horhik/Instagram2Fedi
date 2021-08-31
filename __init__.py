@@ -3,6 +3,7 @@ import sys
 import requests
 from instabot import Bot
 from mastodon import Mastodon
+from colorama import Fore, Back, Style
 
 id_filename = "/app/already_posted.txt"
 f = open(id_filename, "a")
@@ -13,15 +14,23 @@ username = sys.argv[2]
 passwd = sys.argv[3]
 mastodon_token = sys.argv[4]
 
+
+print(Fore.GREEN + '🚀> Loginning into Instagram...')
+print(Style.RESET_ALL)
 bot = Bot()
 bot.login(username = username,  password = passwd)
 
+print(Fore.GREEN + '🚀> Connecting to Mastodon/Pixelfed...')
+print(Style.RESET_ALL)
 mastodon = Mastodon(
     access_token = mastodon_token,
-    api_base_url = 'https://mastodon.ml'
+   # api_base_url = 'https://mastodon.ml'
+    api_base_url = 'https://pixelfed.tokyo/'
 )
 
 def get_post(media_id, filename):
+    print(Fore.YELLOW + '🔃> getting post: ' + media_id)
+    print(Style.RESET_ALL)
     media = bot.get_media_info(media_id)[0]
     id = media["id"]
     post_text = media["caption"]["text"]
@@ -62,8 +71,12 @@ def add_id(id):
 def upload_images_to_mastodon(images_array):
     ids = []
     for i in images_array:
-        media = mastodon.media_post(media_file = i, mime_type = "image/jpeg") # sending image to mastodon
-        ids.append(media["id"])
+        try:
+            media = mastodon.media_post(media_file = i, mime_type = "image/jpeg") # sending image to mastodon
+            ids.append(media["id"])
+        except:
+            print(Fore.RED + "💥> failed to send photo")
+            print(Style.RESET_ALL)
     return ids
 
 twony_last_medias = bot.get_user_medias(fetched_user, filtration = None)
@@ -71,8 +84,12 @@ twony_last_medias = bot.get_user_medias(fetched_user, filtration = None)
 for e,media_id in enumerate(twony_last_medias):
     post = get_post(media_id, "img_"+str(e)) # getting post info
     if(not already_posted(post["id"])):
-        image_ids = upload_images_to_mastodon(post["images"])
-        post_text = str(post["text"]) + "\n" + "crosposted from " + str(post["link"]) # creating post text
-        mastodon.status_post(post_text, media_ids = image_ids) # attaching image to post and creating a toot
-        add_id(post["id"]) # pushing id to "already_posted" file
+        try:
+            image_ids = upload_images_to_mastodon(post["images"])
+            post_text = str(post["text"]) + "\n" + "crosposted from " + str(post["link"]) # creating post text
+            mastodon.status_post(post_text, media_ids = image_ids) # attaching image to post and creating a toot
+            add_id(post["id"]) # pushing id to "already_posted" file
+        except:
+            print(Fore.RED + "😿> failed to create toot")
+            print(Style.RESET_ALL)
 
