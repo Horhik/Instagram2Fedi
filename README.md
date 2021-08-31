@@ -1,4 +1,4 @@
-# Instagram2Fedi 
+# Instagram2Fedi <span><img width="50px" src="https://upload.wikimedia.org/wikipedia/commons/9/93/Fediverse_logo_proposal.svg"></span>
 
 Simple python 🐍 script for crossposting from instagram to Mastodon/Pixelfed
 
