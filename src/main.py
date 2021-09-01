@@ -2,6 +2,7 @@ import os
 import sys
 import requests
 import time
+import hashlib
 from mastodon import Mastodon
 from colorama import Fore, Back, Style
 from instaloader import Profile, Instaloader
@@ -15,7 +16,7 @@ fetched_user = sys.argv[1]
 mastodon_instance = sys.argv[2]
 mastodon_token = sys.argv[3]
 
-post_limit = 7
+post_limit = 100
 time_interval_sec = 1000
 
 print(Fore.GREEN + '🚀 > Connecting to Instagram...')
@@ -49,20 +50,21 @@ def get_image(url):
         print(Fore.RED + "💥 > Failed to download image.")
         print(Style.RESET_ALL)
 
-    
+
 def already_posted(id):
     file = open(id_filename);
-    content = file.read()
-    if id in content:
-        file.close()
-        return True
-    else:
-        file.close()
-        return False
+    content = file.read().split("\n")
+    sha1 = hashlib.sha1(bytes(id, "utf-8")).hexdigest()
+    if sha1 in content:
+            file.close()
+            return True
+    file.close()
+    return False
 
 def mark_as_posted(id):
     file = open(id_filename, 'a');
-    file.write(id + "\n")
+    sha1 = hashlib.sha1(bytes(id, "utf-8")).hexdigest()
+    file.write(sha1+'\n')
     file.close()
 
 def upload_image_to_mastodon(url):
@@ -122,12 +124,13 @@ def get_new_posts():
     stupidcounter = 0
     for post in posts:
         stupidcounter += 1
-        if stupidcounter < post_limit:
+        if stupidcounter <= post_limit:
             if already_posted(str(post.url)):
-                print(Fore.YELLOW + "🐘 > Already Posted", stupidcounter, " of ", posts.count)
+                print(Fore.YELLOW + "🐘 > Already Posted ", post.url)
                 print(Style.RESET_ALL)
                 continue
-            toot(post.url, post.caption)
+            print("Posting... ", post.url)
+    #        toot(post.url, post.caption)
             mark_as_posted(str(post.url))
         else:
             return
