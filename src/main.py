@@ -130,8 +130,9 @@ def get_new_posts():
                 print(Style.RESET_ALL)
                 continue
             print("Posting... ", post.url)
-    #        toot(post.url, post.caption)
+            toot(post.url, post.caption)
             mark_as_posted(str(post.url))
+            time.sleep(5)
         else:
             return
 
