@@ -15,6 +15,9 @@ fetched_user = sys.argv[1]
 mastodon_instance = sys.argv[2]
 mastodon_token = sys.argv[3]
 
+post_limit = 7
+time_interval_sec = 1000
+
 print(Fore.GREEN + '🚀 > Connecting to Instagram...')
 print(Style.RESET_ALL)
 
@@ -30,7 +33,7 @@ mastodon = Mastodon(
 )
 
 def get_image(url):
-    try: 
+    try:
         print(Fore.YELLOW + "🚀 > Downloading Image...", url)
         print(Style.RESET_ALL)
 
@@ -118,19 +121,18 @@ posts = profile.get_posts()
 def get_new_posts():
     stupidcounter = 0
     for post in posts:
-        if stupidcounter < 100:
+        stupidcounter += 1
+        if stupidcounter < post_limit:
             if already_posted(str(post.url)):
                 print(Fore.YELLOW + "🐘 > Already Posted", stupidcounter, " of ", posts.count)
                 print(Style.RESET_ALL)
-                stupidcounter += 1
                 continue
-            stupidcounter += 1
             toot(post.url, post.caption)
             mark_as_posted(str(post.url))
         else:
-            break
+            return
 
 
 while True:
     get_new_posts()
-    time.sleep(600)
+    time.sleep(time_interval_sec)
