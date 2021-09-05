@@ -3,9 +3,10 @@ import sys
 import requests
 import time
 import hashlib
+import json
 from mastodon import Mastodon
 from colorama import Fore, Back, Style
-from instaloader import Profile, Instaloader
+from instaloader import Profile, Instaloader, LatestStamps
 
 id_filename = "/app/already_posted.txt"
 f = open(id_filename, "a")
@@ -16,9 +17,9 @@ fetched_user = sys.argv[1]
 mastodon_instance = sys.argv[2]
 mastodon_token = sys.argv[3]
 
-post_limit = 100
-time_interval_sec = 1000
-
+post_limit = 1
+time_interval_sec = 86400
+post_interval = 10
 print(Fore.GREEN + '🚀 > Connecting to Instagram...')
 print(Style.RESET_ALL)
 
@@ -119,20 +120,31 @@ def generate_title(post):
     return text
 #  'edge_media_to_caption': {'edges': [{'node': {'text': 'Good morning!\n#komikaki #всемкартинки'}}]}
 
+def try_to_get_carousel(arr, post):
+    try:
+        urls = list(map(lambda arr: arr['node']['display_url'], vars(post)['_node']['edge_sidecar_to_children']['edges']))
+        return urls
+        print("Found carousel")
+    except:
+        print("No carousel")
+        return arr
+
 posts = profile.get_posts()
 def get_new_posts():
     stupidcounter = 0
     for post in posts:
         stupidcounter += 1
+        urls = try_to_get_carousel([post.url], post)
         if stupidcounter <= post_limit:
-            if already_posted(str(post.url)):
+            if already_posted(str(post.mediaid)):
                 print(Fore.YELLOW + "🐘 > Already Posted ", post.url)
                 print(Style.RESET_ALL)
                 continue
             print("Posting... ", post.url)
-            toot(post.url, post.caption)
-            mark_as_posted(str(post.url))
-            time.sleep(5)
+            for url in urls:
+                toot(url, post.caption)
+            mark_as_posted(str(post.mediaid))
+            time.sleep(post_interval)
         else:
             return
 
