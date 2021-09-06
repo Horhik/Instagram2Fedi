@@ -9,9 +9,8 @@ from colorama import Fore, Back, Style
 from instaloader import Profile, Instaloader, LatestStamps
 
 id_filename = "/app/already_posted.txt"
-f = open(id_filename, "a")
-f.write("\n")
-f.close()
+with open(id_filename, "a") as f:
+    f.write("\n")
 
 fetched_user = sys.argv[1]
 mastodon_instance = sys.argv[2]
@@ -20,6 +19,10 @@ mastodon_token = sys.argv[3]
 post_limit = 1
 time_interval_sec = 86400
 post_interval = 10
+
+using_mastodon = True;
+mastodon_carousel_size = 4
+
 print(Fore.GREEN + '🚀 > Connecting to Instagram...')
 print(Style.RESET_ALL)
 
@@ -53,20 +56,17 @@ def get_image(url):
 
 
 def already_posted(id):
-    file = open(id_filename);
-    content = file.read().split("\n")
-    sha1 = hashlib.sha1(bytes(id, "utf-8")).hexdigest()
-    if sha1 in content:
-            file.close()
+    with open(id_filename) as file:
+        content = file.read().split("\n")
+        sha1 = hashlib.sha1(bytes(id, "utf-8")).hexdigest()
+        if sha1 in content:
             return True
-    file.close()
-    return False
+        return False
 
 def mark_as_posted(id):
-    file = open(id_filename, 'a');
-    sha1 = hashlib.sha1(bytes(id, "utf-8")).hexdigest()
-    file.write(sha1+'\n')
-    file.close()
+    with open(id_filename, 'a') as file:
+        sha1 = hashlib.sha1(bytes(id, "utf-8")).hexdigest()
+        file.write(sha1+'\n')
 
 def upload_image_to_mastodon(url):
     try:
@@ -80,15 +80,16 @@ def upload_image_to_mastodon(url):
         print(Style.RESET_ALL)
     return media["id"]
 
-def toot(url, title ):
+def toot(urls, title ):
     try:
         print(Fore.YELLOW + "🐘 > Creating Toot...", title)
         print(Style.RESET_ALL)
-
-        id = upload_image_to_mastodon(url)
+        ids = []
+        for url in urls:
+            ids.append(upload_image_to_mastodon(url))
         post_text = str(title) + "\n" + "crosposted from https://instagram.com/"+fetched_user # creating post text
-        print(id)
-        mastodon.status_post(post_text, media_ids = [id])
+        print(ids)
+        mastodon.status_post(post_text, media_ids = ids)
 
     except:
         print(Fore.RED + "😿 > Failed to create toot")
@@ -100,26 +101,6 @@ def none_convert(title):
     else:
         return str(title)
 
-def generate_title(post):
-    text = ""
-    try:
-        print(post.title)
-        text += none_convert(post.title) + "\n"
-    except:
-        print("no title")
-    try:
-        print(post.accessibility_caption)
-        text += none_convert(post.accessibility_caption) + "\n"
-    except:
-        print("no accessibilitycaption")
-    try:
-        print(post.edge_media_to_caption['edges'][0]['node']['text'])
-        text += none_convert(post.edge_media_to_caption['edges'][0]['node']['text'])
-    except:
-        print("no edge_media_to_caption")
-    return text
-#  'edge_media_to_caption': {'edges': [{'node': {'text': 'Good morning!\n#komikaki #всемкартинки'}}]}
-
 def try_to_get_carousel(arr, post):
     try:
         urls = list(map(lambda arr: arr['node']['display_url'], vars(post)['_node']['edge_sidecar_to_children']['edges']))
@@ -129,20 +110,33 @@ def try_to_get_carousel(arr, post):
         print("No carousel")
         return arr
 
+def split_array(arr, size):
+    count = len(arr) // size + 1
+    new_arr = []
+    for i in range(count):
+        new_arr.append(arr[i*size:(i+1)*mastodon_carousel_size])
+    return new_arr
+
 posts = profile.get_posts()
 def get_new_posts():
     stupidcounter = 0
     for post in posts:
         stupidcounter += 1
-        urls = try_to_get_carousel([post.url], post)
+        url_arr = try_to_get_carousel([post.url], post), mastodon_carousel_size
+
         if stupidcounter <= post_limit:
             if already_posted(str(post.mediaid)):
                 print(Fore.YELLOW + "🐘 > Already Posted ", post.url)
                 print(Style.RESET_ALL)
                 continue
             print("Posting... ", post.url)
-            for url in urls:
-                toot(url, post.caption)
+            if using_mastodon:
+                urls_arr = split_array(url_arr)
+                for urls in urls_arr:
+                    toot(urls, post.caption)
+            else:
+                toot(url_arr, post.caption)
+                    
             mark_as_posted(str(post.mediaid))
             time.sleep(post_interval)
         else:
