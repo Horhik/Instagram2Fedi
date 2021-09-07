@@ -17,9 +17,9 @@ def get_image(url):
         print(Style.RESET_ALL)
 
         return response.content
-    except:
+    except Exception as e:
 
-        print(Fore.RED + "💥 > Failed to download image.")
+        print(Fore.RED + "💥 > Failed to download image. \n", e)
         print(Style.RESET_ALL)
 
 
@@ -31,27 +31,26 @@ def upload_image_to_mastodon(url, mastodon):
         print(Fore.GREEN + "✨ > Uploaded!")
         print(Style.RESET_ALL)
         return media["id"]
-    except:
-        print(Fore.RED + "💥 > failed to upload image to mastodon")
+    except Exception as e:
+        print(Fore.RED + "💥 > failed to upload image to mastodon. \n", e)
         print(Style.RESET_ALL)
 
 def toot(urls, title, mastodon, fetched_user ):
-    #try:
-    print(Fore.YELLOW + "🐘 > Creating Toot...", title)
-    print(Style.RESET_ALL)
-    ids = []
-    for url in urls:
-        ids.append(upload_image_to_mastodon(url, mastodon))
-        print(url)
-    post_text = str(title) + "\n" + "crosposted from https://instagram.com/"+fetched_user # creating post text
-    post_text = post_text[0:1000]
-    print(ids)
-    mastodon.status_post(post_text, media_ids = ids)
+    try:
+        print(Fore.YELLOW + "🐘 > Creating Toot...", title)
+        print(Style.RESET_ALL)
+        ids = []
+        for url in urls:
+            ids.append(upload_image_to_mastodon(url, mastodon))
+            print(url)
+            post_text = str(title) + "\n" + "crosposted from https://instagram.com/"+fetched_user # creating post text
+            post_text = post_text[0:1000]
+            print(ids)
+            mastodon.status_post(post_text, media_ids = ids)
 
-   #except:
-   #    print(urls)
-   #    print(Fore.RED + "😿 > Failed to create toot")
-   #    print(Style.RESET_ALL)
+    except Exception as e:
+        print(Fore.RED + "😿 > Failed to create toot \n", e)
+        print(Style.RESET_ALL)
 
 def get_new_posts(mastodon, profile, mastodon_carousel_size, post_limit, already_posted_path, using_mastodon, carousel_size, post_interval, fetched_user):
     posts = profile.get_posts()

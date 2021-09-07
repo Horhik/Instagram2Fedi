@@ -14,8 +14,8 @@ def try_to_get_carousel(array, post):
         return urls
         print(Fore.GREEN + "🎠 > Found carousel!")
         print(Style.RESET_ALL)
-    except:
-        print(Fore.RED + "🎠💥 > No carousel :( ")
+    except Exception as e:
+        print(Fore.RED + "🎠💥 > No carousel :( \n", e)
         print(Style.RESET_ALL)
         return array
 
