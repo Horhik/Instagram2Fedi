@@ -1,3 +1,5 @@
+from colorama import Fore, Back, Style
+
 def split_array(arr, size):
     count = len(arr) // size + 1
     new_arr = []
@@ -6,12 +8,15 @@ def split_array(arr, size):
     return new_arr
 
 
-def try_to_get_carousel(arr, post):
+def try_to_get_carousel(array, post):
     try:
         urls = list(map(lambda arr: arr['node']['display_url'], vars(post)['_node']['edge_sidecar_to_children']['edges']))
         return urls
-        print("Found carousel")
+        print(Fore.GREEN + "🎠 > Found carousel!")
+        print(Style.RESET_ALL)
     except:
-        print("No carousel")
-        return arr
+        print(Fore.RED + "🎠💥 > No carousel :( ")
+        print(Style.RESET_ALL)
+        return array
 
+    

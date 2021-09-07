@@ -1,11 +1,12 @@
 import os
 import sys
 import time
-import hashlib
 import json
 from mastodon import Mastodon
 from colorama import Fore, Back, Style
 from instaloader import Profile, Instaloader, LatestStamps
+
+from network import get_new_posts
 
 id_filename = "/app/already_posted.txt"
 with open(id_filename, "a") as f:
@@ -36,5 +37,5 @@ mastodon = Mastodon(
     # api_base_url = 'https://pixelfed.tokyo/'
 )
 while True:
-    get_new_posts(mastodon, profile)
+    get_new_posts(mastodon, profile, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user)
     time.sleep(time_interval_sec)
