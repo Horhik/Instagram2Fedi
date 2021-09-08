@@ -42,11 +42,10 @@ def toot(urls, title, mastodon, fetched_user ):
         ids = []
         for url in urls:
             ids.append(upload_image_to_mastodon(url, mastodon))
-            print(url)
-            post_text = str(title) + "\n" + "crosposted from https://instagram.com/"+fetched_user # creating post text
-            post_text = post_text[0:1000]
-            print(ids)
-            mastodon.status_post(post_text, media_ids = ids)
+        post_text = str(title) + "\n" + "crosposted from https://instagram.com/"+fetched_user # creating post text
+        post_text = post_text[0:1000]
+        print(ids)
+        mastodon.status_post(post_text, media_ids = ids)
 
     except Exception as e:
         print(Fore.RED + "😿 > Failed to create toot \n", e)
