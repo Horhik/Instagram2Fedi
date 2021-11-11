@@ -44,8 +44,9 @@ def toot(urls, title, mastodon, fetched_user ):
             ids.append(upload_image_to_mastodon(url, mastodon))
         post_text = str(title) + "\n" + "crosposted from https://instagram.com/"+fetched_user # creating post text
         post_text = post_text[0:1000]
-        print(ids)
-        mastodon.status_post(post_text, media_ids = ids)
+        if(ids):
+            print(ids)
+            mastodon.status_post(post_text, media_ids = ids)
 
     except Exception as e:
         print(Fore.RED + "😿 > Failed to create toot \n", e)
@@ -69,7 +70,6 @@ def get_new_posts(mastodon, profile, mastodon_carousel_size, post_limit, already
                     toot(urls, post.caption, mastodon, fetched_user)
             else:
                 toot(url_arr, post.caption, mastodon, fetched_user)
-                    
             mark_as_posted(str(post.mediaid), already_posted_path) 
             time.sleep(post_interval)
         else:
