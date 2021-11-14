@@ -3,19 +3,19 @@
 ## How to use
 You can use Instagram2Fedi via docker or just like a python script
 
-### Via Docker
+### Via Docker 🐋
 
 Specify your variables in `./env.sh` and then run `./run.sh`
 
 You can modify `docker run` arguments in `./run.sh`
 
-### Just a python script
+### Just a python script 🐍
 
 Run `pip3 install -r requirements.txt` and then run `./insta2fedi`.
 
 Specify your arguments. You should use `--use-docker 0`.
 
-## Command line arguments 
+## Command line arguments 🖥
 
 `--use-mastodon` - set not positive number (`0`, `-1`...)  if your instance don't have max image count limit. 
 
@@ -36,3 +36,16 @@ If theres more than one new post, sets with which time interval should it post t
 `--fetch-count` - How many new posts to select
 
 `--use-docker` - If you're running it via docker container, set to `1` or `True`
+
+## Default values ⚙
+Default values are:
+``` bash
+    --instance None
+    --instagram-user None
+    --token None
+    --check-interval 3600
+    --post-interval 3600
+    --fetch-count  10
+    --use-mastodon 4
+    --use-docker True
+```
