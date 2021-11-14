@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
 import time
@@ -11,9 +12,6 @@ from arguments import process_arguments
 from network import get_new_posts
 
 
-id_filename = "/app/already_posted.txt"
-with open(id_filename, "a") as f:
-    f.write("\n")
 
 print(sys.argv)
 print("ARGUMENTS")
@@ -24,12 +22,23 @@ default_settings = {
     "check-interval": 3600,
     "post-interval": 3600, 
     "fetch-count" : 10,
-    "carousel-limit": 4
+    "carousel-limit": 4,
+    "use-docker": True
 }
 
 settings = process_arguments(sys.argv, default_settings)
 
 print(settings)
+
+agree = [1, True, "true", "True", "yes", "Yes"]
+if (agree.count(settings["use-docker"])):
+    id_filename = "/app/already_posted.txt"
+else:
+    id_filename = "./already_posted.txt"
+
+
+with open(id_filename, "a") as f:
+    f.write("\n")
 
 fetched_user = settings["instagram-user"]
 mastodon_instance = settings["instance"]

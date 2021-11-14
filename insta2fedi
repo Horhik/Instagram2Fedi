@@ -1,0 +1,5 @@
+#!/bin/sh
+# -*- coding: utf-8 -*-
+echo "kek"
+echo $@
+python3 src/main.py $@ 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from colorama import Fore, Back, Style
 
 def split_array(arr, size):
