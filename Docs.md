@@ -1,7 +1,7 @@
 # Instagram2Fedi Docs 📜
 
 ## How to use
-You can use Instagram2Fedi via docker or just like a python scrip
+You can use Instagram2Fedi via docker or just like a python script
 
 ### Via Docker
 
@@ -29,7 +29,7 @@ For example, default maximum photo count in mastodon is `4`
 
 `--check-interval` - Interval in seconds how often to check for new posts
 
-`--post-interval`  - Interval in seconds between new fetched posts.
+`--post-interval`  - Interval in seconds between posting new fetched posts.
 
 If theres more than one new post, sets with which time interval should it post them
 
