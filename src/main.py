@@ -2,6 +2,7 @@
 import os
 import sys
 import time
+import datetime
 import json
 from mastodon import Mastodon
 from colorama import Fore, Back, Style
@@ -53,12 +54,14 @@ mastodon_carousel_size = settings["carousel-limit"]
 
 print(Fore.GREEN + '🚀 > Connecting to Instagram...')
 print(Style.RESET_ALL)
+print(datetime.datetime.now())
 
 L = Instaloader()
 profile = Profile.from_username(L.context, fetched_user)
 
 print(Fore.GREEN + '🚀 > Connecting to Mastodon/Pixelfed...')
 print(Style.RESET_ALL)
+print(datetime.datetime.now())
 mastodon = Mastodon(
     access_token = mastodon_token,
     api_base_url = mastodon_instance

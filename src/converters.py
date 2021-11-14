@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from colorama import Fore, Back, Style
+import datetime
 
 def split_array(arr, size):
     count = len(arr) // size + 1
@@ -15,9 +16,10 @@ def try_to_get_carousel(array, post):
         return urls
         print(Fore.GREEN + "🎠 > Found carousel!")
         print(Style.RESET_ALL)
+        print(datetime.datetime.now())
     except Exception as e:
         print(Fore.RED + "🎠💥 > No carousel :( \n", e)
         print(Style.RESET_ALL)
+        print(datetime.datetime.now())
         return array
 
-    

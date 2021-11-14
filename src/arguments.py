@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import datetime
 from colorama import Fore, Back, Style
 def process_arguments(args, defaults):
     count = 1
@@ -28,14 +29,8 @@ def process_arguments(args, defaults):
         else:
             print(Fore.RED + '❗ -> Wrong Argument Name!...')
             print(Style.RESET_ALL)
+            print(datetime.datetime.now())
 
         count +=2
     return defaults
 
-#fuck this shit im out''
-#teenagers scare the living shit out of me
-#deeeespaaaacito quero esperanto de despacito
-#хорошо всё будет хорошо
-#и камнем вниииз
-#u kinda smell *smif* like a BAKA
-#Yeren Yegaaaaaaa!!!!!!!!!
