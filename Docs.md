@@ -15,6 +15,12 @@ Run `pip3 install -r requirements.txt` and then run `./insta2fedi`.
 
 Specify your arguments. You should use `--use-docker 0`.
 
+For example: 
+``` bash
+ ./insta2fedi --use-docker false --instagram-user <instagram username> --instance <instance domain> --token <OAuth token> --check-interval 10 --post-interval 10 --use-mastodon 4
+ # will check for new post each 10 seconds
+```
+
 ## Command line arguments 🖥
 
 `--use-mastodon` - set not positive number (`0`, `-1`...)  if your instance don't have max image count limit. 
