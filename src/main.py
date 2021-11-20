@@ -52,12 +52,7 @@ post_interval =  settings["post-interval"]#1m
 using_mastodon = settings["carousel-limit"] > 0;
 mastodon_carousel_size = settings["carousel-limit"]
 
-print(Fore.GREEN + '🚀 > Connecting to Instagram...')
-print(Style.RESET_ALL)
-print(datetime.datetime.now())
 
-L = Instaloader()
-profile = Profile.from_username(L.context, fetched_user)
 
 print(Fore.GREEN + '🚀 > Connecting to Mastodon/Pixelfed...')
 print(Style.RESET_ALL)
@@ -68,5 +63,5 @@ mastodon = Mastodon(
     # api_base_url = 'https://pixelfed.tokyo/'
 )
 while True:
-    get_new_posts(mastodon, profile, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user)
+    get_new_posts(mastodon, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user)
     time.sleep(time_interval_sec)

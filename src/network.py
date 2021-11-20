@@ -6,6 +6,16 @@ import datetime
 from already_posted import already_posted, mark_as_posted
 from converters import split_array, try_to_get_carousel
 import hashlib
+from instaloader import Profile, Instaloader, LatestStamps
+
+def get_instagram_user(fetched_user):
+    L = Instaloader()
+
+    print(Fore.GREEN + '🚀 > Connecting to Instagram...')
+    print(Style.RESET_ALL)
+    print(datetime.datetime.now())
+
+    return Profile.from_username(L.context, fetched_user)
 
 def get_image(url):
     try:
@@ -62,7 +72,8 @@ def toot(urls, title, mastodon, fetched_user ):
         print(Style.RESET_ALL)
         print(datetime.datetime.now())
 
-def get_new_posts(mastodon, profile, mastodon_carousel_size, post_limit, already_posted_path, using_mastodon, carousel_size, post_interval, fetched_user):
+def get_new_posts(mastodon,  mastodon_carousel_size, post_limit, already_posted_path, using_mastodon, carousel_size, post_interval, fetched_user):
+    profile = get_instagram_user(fetched_user)
     posts = profile.get_posts()
     stupidcounter = 0
     for post in posts:
@@ -84,7 +95,5 @@ def get_new_posts(mastodon, profile, mastodon_carousel_size, post_limit, already
                 toot(url_arr, post.caption, mastodon, fetched_user)
             mark_as_posted(str(post.mediaid), already_posted_path) 
             time.sleep(post_interval)
-        else:
-            return
 
 
