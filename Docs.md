@@ -3,7 +3,7 @@
 ## How to use
 You can use Instagram2Fedi via docker or just like a python script
 
-### Via Docker 🐋
+### With Docker 🐋
 
 Specify your variables in `./env.sh` and then run `./run.sh`
 
