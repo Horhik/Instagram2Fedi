@@ -13,7 +13,7 @@ You can write all needed variables in `./env.sh` and then do `source ./run.sh`
 ``` bash
 git clone https://github.com/horhik/instagram2fedi
 cd instagram2fedi
-vim ./env.sh
+nano ./env.sh
 source ./run.sh
 ```
 
