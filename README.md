@@ -18,7 +18,7 @@ source ./run.sh
 ```
 
 
-![image](https://user-images.githubusercontent.com/46262811/131577640-a3103ff2-af37-422d-96f1-60f1acdef939.png)
+![screenshot](./img.png)
 
 
 

@@ -25,7 +25,7 @@ def get_image(url):
 
         response = requests.get(url)
         response.raw.decode_content = True
-        
+
         print(Fore.GREEN + "✨ > Downloaded!")
         print(Style.RESET_ALL)
         print(datetime.datetime.now())
@@ -96,9 +96,9 @@ def get_new_posts(mastodon,  mastodon_carousel_size, post_limit, already_posted_
                     toot(urls, post.caption, mastodon, fetched_user)
             else:
                 toot(url_arr, post.caption, mastodon, fetched_user)
-            mark_as_posted(str(post.mediaid), already_posted_path) 
+            mark_as_posted(str(post.mediaid), already_posted_path)
             time.sleep(post_interval)
-        else: 
+        else:
             break
     print(Fore.GREEN + "✨ > Fetched All")
     print(Style.RESET_ALL)
