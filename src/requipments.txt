@@ -1,4 +1,0 @@
-pyparsing==2.4.7
-tqdm==4.62.2
-urllib3==1.26.6
-colorama==
