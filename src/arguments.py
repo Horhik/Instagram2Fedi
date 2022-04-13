@@ -19,9 +19,38 @@ print(post_interval)
 print(use_mastodon)
 print(fetch_count)
 
-def exists(a):
-    return a != '' and a != False
+def flags(args, defaults):
+    count = 1
+    while (len(args) > count):
+        if(args[count] == "--instance"):
+            defaults["instance"] = args[count + 1]
+        elif (args[count] == "--instagram-user"):
+            defaults["instagram-user"] = args[count + 1]
 
+        elif (args[count] == "--token"):
+            defaults["token"] = args[count + 1]
+
+        elif (args[count] == "--check-interval"):
+            defaults["check-interval"] = int(args[count + 1])
+
+        elif (args[count] == "--post-interval"):
+            defaults["post-interval"] = int(args[count + 1])
+
+        elif (args[count] == "--fetch-count"):
+            defaults["fetch-count"] = int(args[count + 1])
+
+        elif (args[count] == "--use-mastodon"):
+            defaults["carousel-limit"] = int(args[count + 1])
+        elif (args[count] == "--use-docker"):
+            defaults["use-docker"] = args[count + 1]
+
+        else:
+            print(Fore.RED + '❗ -> Wrong Argument Name!...')
+            print(Style.RESET_ALL)
+            print(datetime.datetime.now())
+
+        count +=2
+    return defaults
 
 def process_arguments(args, defaults):
     defaults["instance"] = instance if instance !='' and instance else None
@@ -34,6 +63,6 @@ def process_arguments(args, defaults):
     #print(Fore.RED + '❗ -> Missing Argument ')
     #print(Style.RESET_ALL)
     #print(datetime.datetime.now())
-    print(defaults)
-    return defaults
+    new_defaults = flags(args, defaults)
+    return new_defaults
 

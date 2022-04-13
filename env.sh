@@ -1,10 +1,10 @@
 #!b/in/sh
 
 # Required
-export YOUR_CONTAINER_NAME=
-export I2M_INSTAGRAM_USER=
-export I2M_INSTANCE=
-export I2M_TOKEN=
+export YOUR_CONTAINER_NAME=kek
+export I2M_INSTAGRAM_USER=kek
+export I2M_INSTANCE=kek
+export I2M_TOKEN=kek
 
 export I2M_CHECK_INTERVAL=3600 #1 hour
 export I2M_POST_INTERVAL=3600 #1 hour
