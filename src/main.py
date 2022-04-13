@@ -24,15 +24,14 @@ default_settings = {
     "post-interval": 3600, 
     "fetch-count" : 10,
     "carousel-limit": 4,
-    "use-docker": True
 }
 
 settings = process_arguments(sys.argv, default_settings)
 
-print(settings)
+print('FINAL SETTINGS' , settings)
 
 agree = [1, True, "true", "True", "yes", "Yes"]
-if (agree.count(settings["use-docker"])):
+if (os.environ.get("USE_DOCKER")):
     id_filename = "/app/already_posted.txt"
 else:
     id_filename = "./already_posted.txt"
