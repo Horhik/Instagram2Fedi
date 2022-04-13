@@ -19,31 +19,21 @@ print(post_interval)
 print(use_mastodon)
 print(fetch_count)
 
-
+def exists(a):
+    return a != '' and a != False
 
 
 def process_arguments(args, defaults):
-    if(instance):
-        defaults["instance"] = instance
-    elif (instagram_user):
-        defaults["instagram-user"] = instagram_user
-    elif (token):
-        defaults["token"] = token
-
-    elif (check_interval):
-        defaults["check-interval"] = check_interval
-
-    elif (post_interval):
-        defaults["post-interval"] = post_interval
-
-    elif (fetch_count):
-        defaults["fetch-count"] = fetch_count
-
-    elif (use_mastodon):
-        defaults["carousel-limit"] = use_mastodon
-    else:
-        print(Fore.RED + '❗ -> Missing Argument ')
-        print(Style.RESET_ALL)
-        print(datetime.datetime.now())
+    defaults["instance"] = instance if instance !='' and instance else None
+    defaults["instagram-user"] = instagram_user if instagram_user != '' and instagram_user else None
+    defaults["token"] = token if token != '' and token else None
+    defaults["check-interval"] = int(check_interval) if check_interval != '' and check_interval else None
+    defaults["post-interval"] = int(post_interval) if post_interval != '' and post_interval else None
+    defaults["fetch-count"] = int(fetch_count) if fetch_count != '' and fetch_count else None
+    defaults["carousel-limit"] = int(use_mastodon) if use_mastodon != '' and use_mastodon else None
+    #print(Fore.RED + '❗ -> Missing Argument ')
+    #print(Style.RESET_ALL)
+    #print(datetime.datetime.now())
+    print(defaults)
     return defaults
 
