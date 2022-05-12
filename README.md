@@ -8,7 +8,7 @@ See [Docs.md](./Docs.md)
 ## Using docker-compose
 
 1. create `docker-compose.yaml` with following content
-``` 
+``` yaml
 version: '3'
 services:
   bot:
