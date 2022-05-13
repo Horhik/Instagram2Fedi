@@ -28,7 +28,7 @@ default_settings = {
 
 settings = process_arguments(sys.argv, default_settings)
 
-print('FAIL ♂ SETTINGS' , settings)
+print('SETTINGS' , settings)
 
 agree = [1, True, "true", "True", "yes", "Yes"]
 if (os.environ.get("USE_DOCKER")):
