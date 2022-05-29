@@ -12,14 +12,41 @@ def split_array(arr, size):
 
 def try_to_get_carousel(array, post):
     try:
-        urls = list(map(lambda arr: arr['node']['display_url'], vars(post)['_node']['edge_sidecar_to_children']['edges']))
-        return urls
-        print(Fore.GREEN + "🎠 > Found carousel!")
-        print(Style.RESET_ALL)
-        print(datetime.datetime.now())
+        node = vars(post)['_node']
+        if 'edge_sidecar_to_children' in node:
+            try:
+                urls = list(map(lambda arr: arr['node']['display_url'], node['edge_sidecar_to_children']['edges']))
+                print(Fore.GREEN + "🎠 > Found carousel!")
+                print(Style.RESET_ALL)
+                print(datetime.datetime.now())
+                return urls
+            except Exception as e:
+                print(Fore.RED + "🎠💥 > No carousel :( \n", e)
+                print(Style.RESET_ALL)
+                print(datetime.datetime.now())
+                return array
+        else:
+                print(Fore.YELLOW + "🎠💥 > No carousel\n")
+
+        # We can also have video in a separate key
+        if 'is_video' in node and node ['is_video']:
+            try:
+                urls = [node['video_url']]
+                print(Fore.GREEN + "🎞 > Found video!")
+                print(Style.RESET_ALL)
+                print(datetime.datetime.now())
+                return urls
+            except Exception as e:
+                print(Fore.RED + "🎞💥 > No video :( \n", e)
+                print(Style.RESET_ALL)
+                print(datetime.datetime.now())
+                return array
+        else:
+            print(Fore.YELLOW + "🎠💥 > No video\n")
+
     except Exception as e:
-        print(Fore.RED + "🎠💥 > No carousel :( \n", e)
+        print(Fore.RED + "😱💥 > No node :( \n", e)
         print(Style.RESET_ALL)
         print(datetime.datetime.now())
         return array
-
+    return array
