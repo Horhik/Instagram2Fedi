@@ -8,14 +8,15 @@ from converters import split_array, try_to_get_carousel
 import hashlib
 from instaloader import Profile, Instaloader, LatestStamps
 
-def get_instagram_user(user):
+def get_instagram_user(user, fetched_user):
     L = Instaloader()
 
-    print(Fore.GREEN + '🚀 > Connecting to Instagram...')
+    print(Fore.GREEN + 'TEST 🚀 > Connecting to Instagram...')
     print(Style.RESET_ALL)
     print(datetime.datetime.now())
-
-    return Profile.from_username(L.context, user)
+    print("USER USER USER!!!!!!!!!!!!!1", user)
+    L.login(user["name"], user["password"])
+    return Profile.from_username(L.context, fetched_user)
 
 def get_image(url):
     try:
@@ -72,9 +73,9 @@ def toot(urls, title, mastodon, fetched_user ):
         print(Style.RESET_ALL)
         print(datetime.datetime.now())
 
-def get_new_posts(mastodon,  mastodon_carousel_size, post_limit, already_posted_path, using_mastodon, carousel_size, post_interval, fetched_user):
+def get_new_posts(mastodon,  mastodon_carousel_size, post_limit, already_posted_path, using_mastodon, carousel_size, post_interval, fetched_user, user):
     # fetching user profile to get new posts
-    profile = get_instagram_user(fetched_user)
+    profile = get_instagram_user(user, fetched_user)
     # get list of all posts
     posts = profile.get_posts()
     stupidcounter = 0

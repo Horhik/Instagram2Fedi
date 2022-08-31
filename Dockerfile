@@ -1,11 +1,10 @@
 FROM python:3.9
 
-RUN pip install instaloader
-RUN pip install Mastodon.py
-RUN pip install colorama
 
 COPY . /app
 WORKDIR /app
+
+RUN pip install -r requirements.txt
 
 ENV USE_DOCKER=1
 ENV YOUR_CONTAINER_NAME="$YOUR_CONTAINER_NAME"

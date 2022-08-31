@@ -8,6 +8,7 @@ See [Docs.md](./Docs.md)
 ## Using docker-compose
 
 1. create `docker-compose.yaml` with following content
+_You can use default.docker-compose.yaml from repo_
 ``` yaml
 version: '3'
 services:
@@ -24,7 +25,11 @@ services:
       - I2M_POST_INTERVAL=3600 #1 hour   
       - I2M_USE_MASTODON=4 #max carouse    - is 4, if there's no limit set to -1
       - I2M_FETCH_COUNT=5 # how many instagram posts to fetch per check_interval   -
+      - I2M_USER_NAME=admin # Your instagram login name
+      - I2M_USER_PASSWORD=admin # Your instagram password
 ```
+
+** Note: ** _Since somewhen it's seems not possible to fetch any data from instagram anonymously (maybe i'm wrong and there's a solution, I'll be very happy to know about it). Due that you unfortunately have to had an instagram accound and provide login and password to this script_
 
 2. And edit environment variables
 

@@ -18,10 +18,12 @@ print(sys.argv)
 print("ARGUMENTS")
 default_settings = {
     "instance": None,
-    "instagram-user": None, 
+    "instagram-user": None,
+    "user-name": "",
+    "user-password": None,
     "token": None,
     "check-interval": 3600,
-    "post-interval": 3600, 
+    "post-interval": 3600,
     "fetch-count" : 10,
     "carousel-limit": 4,
 }
@@ -51,7 +53,10 @@ post_interval =  settings["post-interval"]#1m
 using_mastodon = settings["carousel-limit"] > 0;
 mastodon_carousel_size = settings["carousel-limit"]
 
-
+user = {
+    "name": settings["user-name"],
+    "password": settings["user-password"]
+}
 
 print(Fore.GREEN + '🚀 > Connecting to Mastodon/Pixelfed...')
 print(Style.RESET_ALL)
@@ -62,5 +67,5 @@ mastodon = Mastodon(
     # api_base_url = 'https://pixelfed.tokyo/'
 )
 while True:
-    get_new_posts(mastodon, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user)
+    get_new_posts(mastodon, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user, user)
     time.sleep(time_interval_sec)

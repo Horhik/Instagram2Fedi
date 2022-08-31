@@ -2,6 +2,7 @@
 already_posted.txt
 src/__pycache__/
 .venv
+.venv/
 .env.sh
 docker-compose.yml
 docker-compose.yaml

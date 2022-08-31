@@ -3,6 +3,7 @@
 ## How to use
 You can use Instagram2Fedi via docker or just like a python script
 
+** Note: ** _Since somewhen it's seems not possible to fetch any data from instagram anonymously (maybe i'm wrong and there's a solution, I'll be very happy to know about it). Due that you unfortunately have to had an instagram accound and provide login and password to this script_
 ### With Docker 🐋
 
 Specify your variables in `./env.sh` and then run `./run.sh`
@@ -17,7 +18,7 @@ Specify your arguments. You should use `--use-docker 0`.
 
 For example: 
 ``` bash
- ./insta2fedi --use-docker false --instagram-user <instagram username> --instance <instance domain> --token <OAuth token> --check-interval 10 --post-interval 10 --use-mastodon 4
+ ./insta2fedi --use-docker false --instagram-user <instagram username> --instance <instance domain> --token <OAuth token> --check-interval 10 --post-interval 10 --use-mastodon 4 --user-name <admin> --user-password <admin>
  # will check for new post each 10 seconds
 ```
 
@@ -33,7 +34,15 @@ For example, default maximum photo count in mastodon is `4`
 
 ---
 
-`--instagram-user` - Your instagram user name. 
+`--instagram-user` - Your fetched instagram account user name. 
+
+---
+
+`--user-name` - Your instagram user name. 
+
+---
+
+`--user-password` - Your instagram password. 
 
 ---
 
