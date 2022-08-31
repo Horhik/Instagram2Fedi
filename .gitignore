@@ -3,3 +3,5 @@ already_posted.txt
 src/__pycache__/
 .venv
 .env.sh
+docker-compose.yml
+docker-compose.yaml
