@@ -1,3 +1,5 @@
+_Guys... Instagram is sh*t. Even [bibliogram](https://www.reddit.com/r/privacy/comments/wrczxc/bibliogram_is_being_discontinued/) is being discontinued. If you're able to migrate you proile to any fediverse instance or contact to person, whose instagram you'd like to crosspost and ask him to post to fediverse to, it wil be the best desicion_
+
 # Instagram2Fedi <span><img width="50px" src="https://upload.wikimedia.org/wikipedia/commons/9/93/Fediverse_logo_proposal.svg"></span>
 
 Simple tool for crossposting posts from instagram to Mastodon/Pixelfed.
