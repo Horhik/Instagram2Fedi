@@ -62,7 +62,7 @@ def toot(urls, title, mastodon, fetched_user ):
         ids = []
         for url in urls:
             ids.append(upload_image_to_mastodon(url, mastodon))
-        post_text = str(title) + "\n" + "crosposted from https://instagram.com/"+fetched_user # creating post text
+        post_text = str(title) + "\n" + "crossposted from https://instagram.com/"+fetched_user # creating post text
         post_text = post_text[0:1000]
         if(ids):
             print(ids)
