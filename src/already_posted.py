@@ -17,5 +17,5 @@ def mark_as_posted(id, path):
     with open(path, 'a') as file:
         sha1 = hashlib.sha1(bytes(id, "utf-8")).hexdigest()
         file.write(sha1+'\n')
-        print(file.read())
+
 
