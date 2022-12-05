@@ -37,10 +37,11 @@ if verbose:
     print('SETTINGS' , settings)
 
 agree = [1, True, "true", "True", "yes", "Yes"]
+
+if (os.environ.get("USE_KUBERNETES")):
+    id_filename = "/data/already_posted.txt"
 if (os.environ.get("USE_DOCKER")):
     id_filename = "/app/already_posted.txt"
-elif (os.environ.get("USE_KUBERNETES")):
-    id_filename = "/data/already_posted.txt"
 else:
     id_filename = "./already_posted.txt"
 
