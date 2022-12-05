@@ -14,8 +14,10 @@ def get_instagram_user(user, fetched_user):
     print(Fore.GREEN + 'TEST 🚀 > Connecting to Instagram...')
     print(Style.RESET_ALL)
     print(datetime.datetime.now())
-    print("USER USER USER!!!!!!!!!!!!!1", user)
-    L.login(user["name"], user["password"])
+
+    if user["name"] != None:
+        print("USER USER USER!!!!!!!!!!!!!", user["name"])
+        L.login(user["name"], user["password"])
     return Profile.from_username(L.context, fetched_user)
 
 def get_image(url):
@@ -62,7 +64,7 @@ def toot(urls, title, mastodon, fetched_user ):
         ids = []
         for url in urls:
             ids.append(upload_image_to_mastodon(url, mastodon))
-        post_text = str(title) + "\n" + "crossposted from https://instagram.com/"+fetched_user # creating post text
+        post_text = str(title) + "\n"  # creating post text
         post_text = post_text[0:1000]
         if(ids):
             print(ids)
