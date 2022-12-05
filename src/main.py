@@ -44,6 +44,7 @@ elif (os.environ.get("USE_KUBERNETES")):
 else:
     id_filename = "./already_posted.txt"
 
+print(id_filename)
 
 with open(id_filename, "a") as f:
     f.write("\n")
