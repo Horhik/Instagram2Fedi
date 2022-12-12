@@ -12,6 +12,7 @@ def split_array(arr, size):
 
 def try_to_get_carousel(array, post):
     try:
+        print("Looking for carousel in " + post)
         node = vars(post)['_node']
         if 'edge_sidecar_to_children' in node:
             try:
