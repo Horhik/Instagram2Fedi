@@ -11,17 +11,30 @@ instance = os.environ.get("I2M_INSTANCE")
 token = os.environ.get("I2M_TOKEN")
 check_interval = os.environ.get("I2M_CHECK_INTERVAL") #1 hour 
 post_interval = os.environ.get("I2M_POST_INTERVAL") #1 hour 
-use_mastodon = os.environ.get("I2M_USE_MASTODON") #max carouse is 4, if there's no limit set to -1
+use_mastodon = os.environ.get("I2M_USE_MASTODON") #max carousel is 4, if there's no limit set to -1
 fetch_count = os.environ.get("I2M_FETCH_COUNT") # how many instagram posts to fetch per check_interval
-print('instagram', instagram_user)
-print('instagram', instance)
-print(token)
-print(check_interval)
-print(post_interval)
-print(use_mastodon)
-print(fetch_count)
-print(user_name)
-print(user_password)
+if os.environ.get("I2M_SCHEDULED") == "True":
+    scheduled_run = True # run continuously (if False) or a single time (if True)
+else:
+    scheduled_run = False
+if os.environ.get("I2M_VERBOSE") == "True": # verbose output
+    verbose_output = True
+else:
+    verbose_output = False
+
+if verbose_output:
+    print('instagram', instagram_user)
+    print('instagram', instance)
+    print(token)
+    print(check_interval)
+    print(post_interval)
+    print(use_mastodon)
+    print(fetch_count)
+    print(user_name)
+    print(user_password)
+    print(scheduled_run)
+    print(verbose_output)
+
 
 
 def flags(args, defaults):
@@ -52,6 +65,12 @@ def flags(args, defaults):
             defaults["user-name"] = args[count + 1]
         elif (args[count] == "--user-password"):
             defaults["user-password"] = args[count + 1]
+        elif (args[count] == "--scheduled"):
+            defaults["scheduled"] = True
+            count -= 1
+        elif (args[count] == "--verbose"):
+            defaults["verbose"] = True
+            count -= 1
 
         else:
             print(Fore.RED + '❗ -> Wrong Argument Name!...')
@@ -75,7 +94,8 @@ def process_arguments(args, defaults):
     defaults["post-interval"] = int(post_interval) if post_interval != '' and post_interval else None
     defaults["fetch-count"] = int(fetch_count) if fetch_count != '' and fetch_count else None
     defaults["carousel-limit"] = int(use_mastodon) if use_mastodon != '' and use_mastodon else None
-    defaults["carousel-limit"] = int(use_mastodon) if use_mastodon != '' and use_mastodon else None
+    defaults["scheduled"] = bool(scheduled_run) if scheduled_run else False
+    defaults["verbose"] = bool(verbose_output) if verbose_output else False
     #print(Fore.RED + '❗ -> Missing Argument ')
     #print(Style.RESET_ALL)
     #print(datetime.datetime.now())

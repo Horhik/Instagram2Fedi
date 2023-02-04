@@ -13,9 +13,6 @@ from arguments import process_arguments
 from network import get_new_posts
 
 
-
-print(sys.argv)
-print("ARGUMENTS")
 default_settings = {
     "instance": None,
     "instagram-user": None,
@@ -23,18 +20,27 @@ default_settings = {
     "user-password": None,
     "token": None,
     "check-interval": 3600,
-    "post-interval": 3600,
+    "post-interval": 60,
     "fetch-count" : 10,
     "carousel-limit": 4,
+    "scheduled": False,
+    "verbose": False
 }
 
 settings = process_arguments(sys.argv, default_settings)
 
-print('SETTINGS' , settings)
+verbose = settings["verbose"]
+
+if verbose:
+    print("ARGUMENTS")
+    print(sys.argv)
+    print('SETTINGS' , settings)
 
 agree = [1, True, "true", "True", "yes", "Yes"]
 if (os.environ.get("USE_DOCKER")):
     id_filename = "/app/already_posted.txt"
+elif (os.environ.get("USE_KUBERNETES")):
+    id_filename = "/data/already_posted.txt"
 else:
     id_filename = "./already_posted.txt"
 
@@ -52,6 +58,8 @@ post_interval =  settings["post-interval"]#1m
 
 using_mastodon = settings["carousel-limit"] > 0;
 mastodon_carousel_size = settings["carousel-limit"]
+scheduled = settings["scheduled"]
+
 
 user = {
     "name": settings["user-name"],
@@ -68,4 +76,6 @@ mastodon = Mastodon(
 )
 while True:
     get_new_posts(mastodon, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user, user)
+    if scheduled:
+        break
     time.sleep(time_interval_sec)

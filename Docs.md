@@ -3,7 +3,7 @@
 ## How to use
 You can use Instagram2Fedi via docker or just like a python script
 
-** Note: ** _Since somewhen it's seems not possible to fetch any data from instagram anonymously (maybe i'm wrong and there's a solution, I'll be very happy to know about it). Due that you unfortunately have to had an instagram accound and provide login and password to this script_
+** Note: ** _Credentials can be complicated.  Running without Instagram credentials (`user-name` and `user-password`) appears to work for a short period of time but will, eventually, fail.  Providing credentials will work unless Instagram issues a challenge.  Recommend leaving `user-name` blank if running as a scheduled job (`--scheduled`) and providing them otherwise._
 ### With Docker 🐋
 
 Specify your variables in `./env.sh` and then run `./run.sh`
@@ -65,6 +65,14 @@ If theres more than one new post, sets with which time interval should it post t
 ---
 
 `--use-docker` - If you're running it via docker container, set to `1` or `True`
+
+---
+
+`--scheduled` - If set, Instagram2Fedi runs once instead of sleeping for `check-interval` and running forever.  This is intended for use as a `cron` job.  No additional parameter is needed, just add `--scheduled`.
+
+---
+
+`--verbose` - If set, output all logs including secrets.  No additional parameter is needed, just add `--scheduled`.
 
 
 ## Default values ⚙
