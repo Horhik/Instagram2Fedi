@@ -80,7 +80,7 @@ mastodon = Mastodon(
     # api_base_url = 'https://pixelfed.tokyo/'
 )
 while True:
-    get_new_posts(mastodon, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user, user)
+    get_new_posts(mastodon, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user, user, id_session)
     if scheduled:
         break
     time.sleep(time_interval_sec)
