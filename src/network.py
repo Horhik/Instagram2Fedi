@@ -14,10 +14,12 @@ def get_instagram_user(user, fetched_user):
     print(Fore.GREEN + 'TEST 🚀 > Connecting to Instagram...')
     print(Style.RESET_ALL)
     print(datetime.datetime.now())
-
+    if os.path.exists(id_session):
+        L.load_session_from_file(user["name"], id_session)
     if user["name"] != None:
         print("USER USER USER!!!!!!!!!!!!!", user["name"])
         L.login(user["name"], user["password"])
+        L.save_session_to_file(id_session)
     return Profile.from_username(L.context, fetched_user)
 
 def get_image(url):
