@@ -4,5 +4,6 @@ src/__pycache__/
 .venv
 .venv/
 .env.sh
+run.sh
 docker-compose.yml
 docker-compose.yaml

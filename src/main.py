@@ -37,13 +37,18 @@ if verbose:
     print('SETTINGS' , settings)
 
 agree = [1, True, "true", "True", "yes", "Yes"]
-if (os.environ.get("USE_DOCKER")):
-    id_filename = "/app/already_posted.txt"
-elif (os.environ.get("USE_KUBERNETES")):
+
+if (os.environ.get("USE_KUBERNETES")):
     id_filename = "/data/already_posted.txt"
+    id_session = "/data/session"
+elif (os.environ.get("USE_DOCKER")):
+    id_filename = "/app/already_posted.txt"
+    id_session = "/app/session"
 else:
     id_filename = "./already_posted.txt"
+    id_session = "./session"
 
+print(id_filename)
 
 with open(id_filename, "a") as f:
     f.write("\n")
@@ -75,7 +80,7 @@ mastodon = Mastodon(
     # api_base_url = 'https://pixelfed.tokyo/'
 )
 while True:
-    get_new_posts(mastodon, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user, user)
+    get_new_posts(mastodon, mastodon_carousel_size, post_limit, id_filename, using_mastodon, mastodon_carousel_size, post_interval, fetched_user, user, id_session)
     if scheduled:
         break
     time.sleep(time_interval_sec)
