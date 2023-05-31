@@ -17,7 +17,12 @@ def get_instagram_user(user, fetched_user, id_session):
     print(datetime.datetime.now())
     if os.path.exists(id_session):
         L.load_session_from_file(user["name"], id_session)
-    if user["name"] != None:
+    try:
+        username = L.test_login()
+    except:
+        username = None
+    print("USER USER USER!!!!!!!!!!!!!", user["name"])
+    if not username and user["name"] != None:
         print("USER USER USER!!!!!!!!!!!!!", user["name"])
         L.login(user["name"], user["password"])
         L.save_session_to_file(id_session)
